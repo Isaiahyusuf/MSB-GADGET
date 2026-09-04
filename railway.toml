@@ -2,6 +2,9 @@
 builder = "NIXPACKS"
 buildCommand = "npm run build"
 
+[build.env]
+NIXPACKS_NODE_VERSION = "22.18.0"
+
 [deploy]
 startCommand = "npm run db:migrate && npm start"
 restartPolicyType = "ON_FAILURE"
