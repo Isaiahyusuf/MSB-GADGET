@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
+import CategoryIcon from "@/components/CategoryIcon";
 
 export default async function AdminDashboard() {
   const [listings, orders, users] = await Promise.all([
@@ -8,10 +9,10 @@ export default async function AdminDashboard() {
     db.orm.public.User.all(),
   ]);
   const stats = [
-    { title: "Total Listings", value: listings.length, description: "All listings", icon: "📦" },
-    { title: "Available", value: listings.filter((listing) => listing.status === "AVAILABLE").length, description: "Published listings", icon: "✓" },
-    { title: "Orders", value: orders.length, description: "Customer orders", icon: "🧾" },
-    { title: "Customers", value: users.length, description: "Registered customers", icon: "👥" },
+    { title: "Total Listings", value: listings.length, description: "All listings", icon: "listings" },
+    { title: "Available", value: listings.filter((listing) => listing.status === "AVAILABLE").length, description: "Published listings", icon: "available" },
+    { title: "Orders", value: orders.length, description: "Customer orders", icon: "orders" },
+    { title: "Customers", value: users.length, description: "Registered customers", icon: "customers" },
   ];
 const menuItems = [
   {
@@ -21,17 +22,17 @@ const menuItems = [
   },
   {
     title: "Gadgets",
-    icon: "📱",
+    icon: "gadget",
     href: "/admin/listings",
   },
   {
     title: "Cars",
-    icon: "🚗",
+    icon: "car",
     href: "/admin/listings",
   },
   {
     title: "Lands & Properties",
-    icon: "🏡",
+    icon: "land",
     href: "/admin/listings",
   },
   {
@@ -96,7 +97,7 @@ const menuItems = [
                 }`}
               >
                 <span className="flex w-6 justify-center">
-                  {item.icon}
+                  {item.icon === "gadget" || item.icon === "car" || item.icon === "land" ? <CategoryIcon type={item.icon} className="h-5 w-5" /> : item.icon}
                 </span>
 
                 {item.title}
@@ -198,8 +199,8 @@ const menuItems = [
                       </p>
                     </div>
 
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-2xl">
-                      {stat.icon}
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                      {stat.icon === "available" ? "✓" : stat.icon === "orders" ? "#" : stat.icon === "customers" ? "@" : <CategoryIcon type="gadget" className="h-6 w-6" />}
                     </div>
                   </div>
 

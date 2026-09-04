@@ -71,6 +71,7 @@ model User {
 
   sessions Session[]
   orders   Order[]
+  passwordResetTokens PasswordResetToken[]
 
   @@index([email])
   @@map("users")
@@ -86,6 +87,20 @@ model Session {
 
   @@index([userId])
   @@map("sessions")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
 }
 
 model Order {

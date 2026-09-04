@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { passwordRequirements } from "@/lib/password-policy";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", password: "", confirmation: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -31,12 +32,15 @@ export default function RegisterPage() {
         <p className="text-sm font-bold uppercase tracking-widest text-blue-600">MSB Marketplace</p>
         <h1 className="mt-3 text-3xl font-black text-gray-950">Create your account</h1>
         <p className="mt-2 text-gray-500">Your cart stays ready while you complete checkout.</p>
-        {(["name", "email", "phone", "password"] as const).map((field) => (
+        {(["name", "email", "phone", "password", "confirmation"] as const).map((field) => (
           <label key={field} className="mt-4 block text-sm font-bold capitalize text-gray-800">
-            {field}
+            {field === "confirmation" ? "Confirm password" : field}
             <input type={field === "password" ? "password" : field === "email" ? "email" : "text"} required={field !== "phone"} value={form[field]} onChange={(event) => setForm({ ...form, [field]: event.target.value })} className="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-950 outline-none focus:border-blue-600" />
           </label>
         ))}
+        <ul className="mt-4 space-y-1 text-xs text-gray-500">
+          {passwordRequirements.map((requirement) => <li key={requirement}>• {requirement}</li>)}
+        </ul>
         {error && <p className="mt-3 text-sm font-semibold text-red-600">{error}</p>}
         <button type="submit" disabled={loading} className="mt-6 w-full rounded-xl bg-blue-600 px-5 py-3 font-bold text-white disabled:opacity-60">{loading ? "Creating account..." : "Create account"}</button>
         <p className="mt-5 text-center text-sm text-gray-500">Already registered? <Link href="/login" className="font-bold text-blue-600">Sign in</Link></p>

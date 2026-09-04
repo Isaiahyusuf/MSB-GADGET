@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import CategoryIcon from "@/components/CategoryIcon";
 
 type ListingType = "gadget" | "car" | "land";
 
@@ -58,7 +59,7 @@ export default function AddListingPage() {
                   : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
               }`}
             >
-              <div className="text-4xl">📱</div>
+              <CategoryIcon type="gadget" className="h-10 w-10 text-blue-600" />
 
               <h3 className="mt-4 font-black text-gray-950">
                 Gadget
@@ -79,7 +80,7 @@ export default function AddListingPage() {
                   : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
               }`}
             >
-              <div className="text-4xl">🚗</div>
+              <CategoryIcon type="car" className="h-10 w-10 text-blue-600" />
 
               <h3 className="mt-4 font-black text-gray-950">
                 Car
@@ -100,7 +101,7 @@ export default function AddListingPage() {
                   : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
               }`}
             >
-              <div className="text-4xl">🏡</div>
+              <CategoryIcon type="land" className="h-10 w-10 text-blue-600" />
 
               <h3 className="mt-4 font-black text-gray-950">
                 Land / Property

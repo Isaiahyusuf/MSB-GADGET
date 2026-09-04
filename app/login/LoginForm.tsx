@@ -41,6 +41,7 @@ export default function LoginForm() {
       <input id="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} required className="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-950 outline-none focus:border-blue-600" />
       {error && <p className="mt-3 text-sm font-semibold text-red-600">{error}</p>}
       <button type="submit" disabled={loading} className="mt-6 w-full rounded-xl bg-blue-600 px-5 py-3 font-bold text-white disabled:opacity-60">{loading ? "Signing in..." : "Sign in"}</button>
+      <Link href="/forgot-password" className="mt-4 block text-center text-sm font-bold text-blue-600">Forgot password?</Link>
       <p className="mt-5 text-center text-sm text-gray-500">New here? <Link href="/register" className="font-bold text-blue-600">Create an account</Link></p>
     </form>
   );

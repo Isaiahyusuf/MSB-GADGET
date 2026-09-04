@@ -1,5 +1,6 @@
 import Link from "next/link";
 import FeaturedListings from "@/components/FeaturedListings";
+import CategoryIcon from "@/components/CategoryIcon";
 
 export const dynamic = "force-dynamic";
 
@@ -8,21 +9,21 @@ const categories = [
     title: "Gadgets",
     description:
       "Phones, laptops, tablets, accessories and the latest technology.",
-    icon: "📱",
+    icon: "gadget",
     href: "/gadgets",
   },
   {
     title: "Cars",
     description:
       "Find quality cars and vehicles for personal and business use.",
-    icon: "🚗",
+    icon: "car",
     href: "/cars",
   },
   {
     title: "Lands",
     description:
       "Discover land and property opportunities in strategic locations.",
-    icon: "🏡",
+    icon: "land",
     href: "/lands",
   },
 ];
@@ -73,16 +74,16 @@ export default function Home() {
           <div className="relative">
             <div className="rounded-[2rem] border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur">
               <div className="grid grid-cols-2 gap-4">
-                <div className="flex h-48 items-center justify-center rounded-2xl bg-white/10 text-7xl">
-                  📱
+                <div className="flex h-48 items-center justify-center rounded-2xl bg-white/10 text-blue-400">
+                  <CategoryIcon type="gadget" className="h-24 w-24" />
                 </div>
 
-                <div className="flex h-48 items-center justify-center rounded-2xl bg-white/10 text-7xl">
-                  🚗
+                <div className="flex h-48 items-center justify-center rounded-2xl bg-white/10 text-blue-400">
+                  <CategoryIcon type="car" className="h-24 w-24" />
                 </div>
 
-                <div className="col-span-2 flex h-40 items-center justify-center rounded-2xl bg-blue-600 text-7xl">
-                  🏡
+                <div className="col-span-2 flex h-40 items-center justify-center rounded-2xl bg-blue-600 text-white">
+                  <CategoryIcon type="land" className="h-24 w-24" />
                 </div>
               </div>
             </div>
@@ -115,7 +116,7 @@ export default function Home() {
               className="group rounded-3xl border border-gray-200 bg-white p-8 transition duration-300 hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl"
             >
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100 text-4xl transition group-hover:bg-blue-50">
-                {category.icon}
+                <CategoryIcon type={category.icon as "gadget" | "car" | "land"} className="h-9 w-9 text-blue-600" />
               </div>
 
               <h3 className="mt-7 text-2xl font-black">
