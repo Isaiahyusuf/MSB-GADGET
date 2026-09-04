@@ -46,4 +46,4 @@ Deploy on Vercel or another Node-compatible host with the environment variables 
 
 ## Admin access
 
-Open `/login` and sign in with `ADMIN_PASSWORD`. The admin session is an HTTP-only, signed cookie and expires after 12 hours. The same session protects `/admin/*` and `POST /api/admin/listings`.
+Open `/admin-login` and sign in with `ADMIN_PASSWORD`. The admin session is an HTTP-only, signed cookie and expires after 12 hours. The same session protects `/admin/*` and `POST /api/admin/listings`.
