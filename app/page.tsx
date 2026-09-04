@@ -1,6 +1,8 @@
 import Link from "next/link";
 import FeaturedListings from "@/components/FeaturedListings";
 
+export const dynamic = "force-dynamic";
+
 const categories = [
   {
     title: "Gadgets",
