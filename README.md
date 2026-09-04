@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MSB All Round Service
 
-## Getting Started
+Marketplace for gadgets and future car and property listings, built with Next.js, Prisma Next, Postgres, and Cloudinary.
 
-First, run the development server:
+## Local development
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. Install dependencies with `npm ci`.
+2. Create a root `.env.local` file using the variables below.
+3. Generate or apply the database contract, then start Next.js with `npm run dev`.
+
+```env
+DATABASE_URL="postgresql://..."
+ADMIN_PASSWORD="use-a-long-random-password"
+ADMIN_SESSION_SECRET="use-a-different-long-random-secret"
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="..."
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="..."
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The nested `app/admin/add-listing/.env` file is not loaded by Next.js or Prisma. Keep all deployment variables in the host's environment or in a root local env file. Never commit secrets.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Database deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses the Prisma Next contract at `prisma/contract.prisma`. For a new or shared database, emit and review a formal migration before deploying:
 
-## Learn More
+```bash
+npx prisma contract emit
+npx prisma migration plan --name initial_schema
+npx prisma db migrate --db "$DATABASE_URL"
+npx prisma db verify --db "$DATABASE_URL"
+```
 
-To learn more about Next.js, take a look at the following resources:
+The generated migration package `migrations/app/20260904T1830_commerce_foundation` includes the commerce tables. On Railway, run `npm run db:migrate -- --db "$DATABASE_URL"` as a release/deploy step before starting the app.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Commit the generated migration package under `migrations/app/`. Do not use `db update` for production; it is intended for a local development database.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Production checks
 
-## Deploy on Vercel
+```bash
+npm ci
+npm run lint
+npm run build
+npx tsc --noEmit
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deploy on Vercel or another Node-compatible host with the environment variables above. The start command is `npm start`; the build command is `npm run build`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Admin access
+
+Open `/login` and sign in with `ADMIN_PASSWORD`. The admin session is an HTTP-only, signed cookie and expires after 12 hours. The same session protects `/admin/*` and `POST /api/admin/listings`.

@@ -1,0 +1,298 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.enquiries",
+    "label": "Create table \"enquiries\"",
+    "summary": "Creates table \"enquiries\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "enquiries"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"enquiries\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"enquiries\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"enquiries\"",
+        "sql": "CREATE TABLE \"public\".\"enquiries\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text,\n  \"id\" text NOT NULL,\n  \"listingId\" text NOT NULL,\n  \"message\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"phone\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"enquiries\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"enquiries\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.listing_images",
+    "label": "Create table \"listing_images\"",
+    "summary": "Creates table \"listing_images\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "listing_images"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"listing_images\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"listing_images\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"listing_images\"",
+        "sql": "CREATE TABLE \"public\".\"listing_images\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"listingId\" text NOT NULL,\n  \"url\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"listing_images\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"listing_images\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.listings",
+    "label": "Create table \"listings\"",
+    "summary": "Creates table \"listings\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "listings"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"listings\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"listings\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"listings\"",
+        "sql": "CREATE TABLE \"public\".\"listings\" (\n  \"brand\" text,\n  \"condition\" text,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"description\" text,\n  \"featured\" bool DEFAULT false NOT NULL,\n  \"fuelType\" text,\n  \"id\" text NOT NULL,\n  \"location\" text NOT NULL,\n  \"mileage\" int4,\n  \"model\" text,\n  \"price\" float8 NOT NULL,\n  \"propertySize\" text,\n  \"quantity\" int4 DEFAULT 1 NOT NULL,\n  \"status\" text DEFAULT 'AVAILABLE' NOT NULL,\n  \"storage\" text,\n  \"title\" text NOT NULL,\n  \"titleDocument\" text,\n  \"transmission\" text,\n  \"type\" text NOT NULL,\n  \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"year\" int4,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"listings\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"listings\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.enquiries.enquiries_listingId_idx_953decda",
+    "label": "Create index \"enquiries_listingId_idx_953decda\" on \"enquiries\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "enquiries_listingId_idx_953decda",
+        "table": "enquiries"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"enquiries_listingId_idx_953decda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"enquiries_listingId_idx_953decda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"enquiries_listingId_idx_953decda\"",
+        "sql": "CREATE INDEX \"enquiries_listingId_idx_953decda\" ON \"public\".\"enquiries\" (\"listingId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"enquiries_listingId_idx_953decda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"enquiries_listingId_idx_953decda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.listing_images.listing_images_listingId_idx_953decda",
+    "label": "Create index \"listing_images_listingId_idx_953decda\" on \"listing_images\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "listing_images_listingId_idx_953decda",
+        "table": "listing_images"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"listing_images_listingId_idx_953decda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"listing_images_listingId_idx_953decda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"listing_images_listingId_idx_953decda\"",
+        "sql": "CREATE INDEX \"listing_images_listingId_idx_953decda\" ON \"public\".\"listing_images\" (\"listingId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"listing_images_listingId_idx_953decda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"listing_images_listingId_idx_953decda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.enquiries.enquiries_listingId_fkey",
+    "label": "Add foreign key \"enquiries_listingId_fkey\" on \"enquiries\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "enquiries_listingId_fkey",
+        "table": "enquiries"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"enquiries_listingId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "enquiries_listingId_fkey",
+          "public",
+          "\"public\".\"enquiries\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"enquiries_listingId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"enquiries\"\nADD CONSTRAINT \"enquiries_listingId_fkey\"\nFOREIGN KEY (\"listingId\")\nREFERENCES \"public\".\"listings\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"enquiries_listingId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "enquiries_listingId_fkey",
+          "public",
+          "\"public\".\"enquiries\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.listing_images.listing_images_listingId_fkey",
+    "label": "Add foreign key \"listing_images_listingId_fkey\" on \"listing_images\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "listing_images_listingId_fkey",
+        "table": "listing_images"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"listing_images_listingId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "listing_images_listingId_fkey",
+          "public",
+          "\"public\".\"listing_images\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"listing_images_listingId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"listing_images\"\nADD CONSTRAINT \"listing_images_listingId_fkey\"\nFOREIGN KEY (\"listingId\")\nREFERENCES \"public\".\"listings\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"listing_images_listingId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "listing_images_listingId_fkey",
+          "public",
+          "\"public\".\"listing_images\""
+        ]
+      }
+    ]
+  }
+]

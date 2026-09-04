@@ -1,0 +1,142 @@
+// use prisma-next
+
+model Listing {
+  id            String   @id @default(uuid())
+  title         String
+  description   String?
+  type          String
+  price         Float
+  location      String
+  condition     String?
+  status        String   @default("AVAILABLE")
+  featured      Boolean  @default(false)
+  quantity      Int      @default(1)
+
+  // Gadget details
+  brand         String?
+  model         String?
+  storage       String?
+
+  // Car details
+  year          Int?
+  mileage       Int?
+  transmission  String?
+  fuelType      String?
+
+  // Land / Property details
+  propertySize  String?
+  titleDocument String?
+
+  images        ListingImage[]
+  enquiries     Enquiry[]
+  orderItems    OrderItem[]
+
+  createdAt     DateTime @default(now())
+updatedAt     DateTime @default(now())
+  @@map("listings")
+}
+
+model ListingImage {
+  id        String   @id @default(uuid())
+  url       String
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@map("listing_images")
+}
+
+model Enquiry {
+  id        String   @id @default(uuid())
+  name      String
+  email     String?
+  phone     String
+  message   String
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@map("enquiries")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  phone        String?
+  role         String   @default("CUSTOMER")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+
+  sessions Session[]
+  orders   Order[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Order {
+  id               String          @id @default(uuid())
+  userId           String
+  fullName         String
+  email            String
+  phone            String
+  deliveryAddress  String?
+  totalAmount      Float
+  orderStatus      String          @default("PENDING")
+  paymentStatus    String          @default("UNPAID")
+  paymentAccountId String?
+  paymentAccount   PaymentAccount? @relation(fields: [paymentAccountId], references: [id], onDelete: SetNull)
+  user             User            @relation(fields: [userId], references: [id], onDelete: Restrict)
+  items            OrderItem[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now())
+
+  @@index([userId])
+  @@index([orderStatus])
+  @@index([paymentStatus])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  listingId String
+  title     String
+  quantity  Int
+  unitPrice Float
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([listingId])
+  @@map("order_items")
+}
+
+model PaymentAccount {
+  id            String   @id @default(uuid())
+  bankName      String
+  accountName   String
+  accountNumber String
+  instructions  String?
+  active        Boolean  @default(false)
+  orders        Order[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+
+  @@index([active])
+  @@map("payment_accounts")
+}
